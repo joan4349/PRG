@@ -24,10 +24,10 @@ public class NodeString {
 	/**Constructor:
 	 * @param, <b>String:</b> <i> dato del nodo.</i>
 	 * @param, <b>NodeString:</b> <i> dato de la posicion next del nodo.</i>*/
-	public NodeString(String word, String trad, NodeString next) {
-		word = word;
+	public NodeString(String w, String trad, NodeString n) {
+		word = w;
 		traduction = trad;
-		next = this.next;
+		next = n;
 	}
 	
 	
