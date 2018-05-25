@@ -62,9 +62,9 @@ public class Diccionario {
             }
         }
         
-        }
+        
         ant.next = new NodeString(p,s,aux); size++;
-        }
+        
 	}
 	/**
 	 * Quit the word
