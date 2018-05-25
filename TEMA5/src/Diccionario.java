@@ -42,35 +42,25 @@ public class Diccionario {
 	 * **/
 	public void insert (String p, String s) {
 				
-		 if(first == null){
+		NodeString aux = first;
+        NodeString ant = null;
+        
+        while(aux != null && aux.word.compareToIgnoreCase(p)<=0){
+            ant = aux;
+            aux = aux.next;
+        }
+        
+        if(aux == first){
             first = new NodeString(p,s,first);
             size++;
         }
         else{
-        
-        NodeString aux = first; // auxiliar
-        NodeString ant = null; // anterior
-        
-        while(aux != null){
-            if(aux.word.compareToIgnoreCase(p)==0){return;}
+            if(ant.word.equals(p)){}
             else{
-                if(aux.word.compareToIgnoreCase(p)<0){
-                    ant = aux;
-                    aux = aux.next;
-                }
-                else{
-                     if(aux==first){
-                         first = new NodeString(p,s,first);
-                     }
-                     else{
-                         ant.next = new NodeString(p,s,aux);
-                     }
-                     size++;
-                        return;
-                    }
-                
+                ant.next = new NodeString(p,s,aux);
+                size++;
             }
-            
+        }
         
         }
         ant.next = new NodeString(p,s,aux); size++;
