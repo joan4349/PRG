@@ -56,15 +56,18 @@ public class Diccionario {
 		    aux = aux.next;
 		}
         
-		if(aux == first){
-		    first = new NodeString(p,s, descrip, first);
-		    size++;
-		}else{
-		    if(ant.word.equals(p)){}
-		    else{
-			ant.next = new NodeString(p,s,desc,aux);
-			size++;
-		    }
+		 if(aux == first){
+            p = p.substring(0,1).toUpperCase() + p.substring(1);
+            s = s.substring(0,1).toUpperCase() + s.substring(1);
+            first = new NodeString(p,s,first);
+            size++;
+        }
+        else if(!ant.word.equals(p)){
+                p = p.substring(0,1).toUpperCase() + p.substring(1);
+                s = s.substring(0,1).toUpperCase() + s.substring(1);
+                ant.next = new NodeString(p,s,aux);
+                size++;
+            }
         }
     }
 	/**
@@ -100,8 +103,7 @@ public class Diccionario {
     		if(aux == null){
         		res = "The word " + p + " doesn`t exist in the dictionary";
         	}else{
-        	res = "Palabra: " + p.substring(0,1).toUpperCase() + p.substring(1)+ "\t Traducci�n: " + aux.traduction.substring(0,1).toUpperCase() 
-                +aux.traduction.substring(1);
+        	res = "Palabra: " + p + "\t Traducci�n: " + aux.traduction;
     		}
     	
     	return res;
@@ -129,6 +131,92 @@ public class Diccionario {
 	public int size() {
 		return size;
 	}
+
+
+public Diccionario union(Diccionario other) {
+        Diccionario result = new Diccionario();
+        NodeString aux1 = this.first; // nodo a revisar del conjunto this
+        NodeString aux2 = other.first; // nodo a revisar de otro
+        NodeString lastResult = null; // último nodo de result, inicialmente null
+        while (aux1 != null && aux2 != null) {
+            
+            if(aux1.word.equalsIgnoreCase(aux2.word)){
+                if(result.first == null){
+                    
+                    result.first = new NodeString(aux1.word, aux1.traduction ,result.first);
+                    
+                    lastResult = result.first;
+                }
+                else{
+                    lastResult.next = new NodeString(aux1.word, aux1.traduction, null);
+                    lastResult = lastResult.next;
+                }
+                result.size++;
+                aux1 = aux1.next;
+                aux2 = aux2.next;
+            }
+            else{   
+                if(aux1.word.compareTo(aux2.word) < 0) {
+                    if(result.first == null){
+                    result.first = new NodeString(aux1.word, aux1.traduction, result.first);
+                    lastResult = result.first;
+                    }
+                    else{
+                    lastResult.next = new NodeString(aux1.word, aux1.traduction, null);
+                    lastResult = lastResult.next;
+                }
+                aux1 = aux1.next;
+                }
+                else {
+                    if(result.first == null){
+                    result.first = new NodeString(aux2.word, aux2.traduction, result.first);
+                    lastResult = result.first;
+                    }
+                    else{
+                    lastResult.next = new NodeString(aux2.word, aux2.traduction, null);
+                    lastResult = lastResult.next;
+                }
+                aux2 = aux2.next;
+            }
+                result.size++;
+            }
+        }
+        
+        if(aux1 == null){
+            if(result.first == null){
+                result.first = new NodeString(aux2.word, aux2.traduction, result.first);
+                lastResult = result.first;
+                result.size++;
+                aux2 = aux2.next;
+            }
+            while(aux2!=null){
+                
+                lastResult.next = new NodeString(aux2.word, aux2.traduction,null);
+                aux2 = aux2.next;
+                lastResult = lastResult.next;
+                result.size++;
+            }
+            
+        }
+        else{
+            if(result.first == null){
+                result.first = new NodeString(aux1.word, aux1.traduction,result.first);
+                lastResult = result.first;
+                result.size++;
+                aux1 = aux1.next;
+            }
+            while(aux1!=null){
+                lastResult.next = new NodeString(aux1.word,aux2.traduction,null);
+                aux1 = aux1.next;
+                lastResult = lastResult.next;
+                result.size++;
+            }
+        }
+        return result;
+                
+    }
+
+
 	
 	/**
 	 * @return String palabra + traduccion
@@ -142,7 +230,7 @@ public class Diccionario {
         int i = 1;
         String res= "Palabra--------Traducci�n" + "\n";
         while(i <= size){
-            res += i + "." + aux.word.substring(0,1).toUpperCase() + aux.word.substring(1)+"   " + aux.traduction.substring(0,1).toUpperCase() + aux.traduction.substring(1);
+            res += i + "." + aux.word + "   " + aux.traduction;
             res += "\n";
             i++;
             
