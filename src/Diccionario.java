@@ -6,8 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Diccionario {
-	
-	private static final int CAPACITAT = 50;//la paraula encarregada de la capacitat
+
 	private NodeString first;
 	private int size;
 	
@@ -43,37 +42,36 @@ public class Diccionario {
 	public void insert (String p, String s, String desc) {
 				
 		NodeString aux = first;
-        NodeString ant = null;
-        String descrip = "N";
+        	NodeString ant = null;
+        	String descrip = "N";
         
-        if(desc.length() == 0) {
-        	descrip = "Without description.";
-        }else {
-        	descrip = desc;
-        }
+        	if(desc.length() == 0) {
+        		descrip = "Without description.";
+        	}else {
+        		descrip = desc;
+        	}
         
-        while(aux != null && (aux.word.compareToIgnoreCase(p))<=0){
-            ant = aux;
-            aux = aux.next;
-        }
+		while(aux != null && (aux.word.compareToIgnoreCase(p))<=0){
+		    ant = aux;
+		    aux = aux.next;
+		}
         
-        if(aux == first){
-            first = new NodeString(p,s, descrip, first);
-            size++;
-        }
-        else{
-            if(ant.word.equals(p)){}
-            else{
-                ant.next = new NodeString(p,s,desc,aux);
-                size++;
-            }
+		if(aux == first){
+		    first = new NodeString(p,s, descrip, first);
+		    size++;
+		}else{
+		    if(ant.word.equals(p)){}
+		    else{
+			ant.next = new NodeString(p,s,desc,aux);
+			size++;
+		    }
         }
     }
 	/**
 	 * Quit the word
 	 * **/
 	public void remove(String p) {
-		 NodeString aux = first;
+		NodeString aux = first;
 	    	NodeString ant = null;
 	    	if(size == 0){throw new NoSuchElementException();}
 	    	while(aux != null && !aux.word.equalsIgnoreCase(p)){
@@ -94,18 +92,17 @@ public class Diccionario {
 	 * **/
 	public String search(String p) {
 		NodeString aux = this.first;
-    	while(aux != null && !aux.word.equalsIgnoreCase(p)){
-        	aux = aux.next;
-    	}
-    	String res = "";
+    		while(aux != null && !aux.word.equalsIgnoreCase(p)){
+        		aux = aux.next;
+    		}
+    		String res = "";
     	
-    	if(aux == null){
-        	res = "The word " + p + " doesn`t exist int the dictionary";
-        	}
-    	else{
+    		if(aux == null){
+        		res = "The word " + p + " doesn`t exist in the dictionary";
+        	}else{
         	res = "Palabra: " + p.substring(0,1).toUpperCase() + p.substring(1)+ "\t Traducci�n: " + aux.traduction.substring(0,1).toUpperCase() 
                 +aux.traduction.substring(1);
-    	}
+    		}
     	
     	return res;
 	}
