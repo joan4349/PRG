@@ -103,7 +103,8 @@ public class Diccionario {
         	res = "The word " + p + " doesn`t exist int the dictionary";
         	}
     	else{
-        	res = "Word: " + p + ". > Traduction: " + aux.traduction + ". > Definition: " + aux.description + ".";
+        	res = "Palabra: " + p.substring(0,1).toUpperCase() + p.substring(1)+ "\t Traducciï¿½n: " + aux.traduction.substring(0,1).toUpperCase() 
+                +aux.traduction.substring(1);
     	}
     	
     	return res;
@@ -141,13 +142,14 @@ public class Diccionario {
  	*/
 	public String toString(){
     	NodeString aux = first;
-    	int i = 1;
-    	String res= "Palabra--------Traducción";
-    	while(i <= size){
-        	res += i + "." + aux.word + "   " + aux.traduction;
-        	i++;
-        	
-    	}
-    	return res;
+        int i = 1;
+        String res= "Palabra--------Traducciï¿½n" + "\n";
+        while(i <= size){
+            res += i + "." + aux.word.substring(0,1).toUpperCase() + aux.word.substring(1)+"   " + aux.traduction.substring(0,1).toUpperCase() + aux.traduction.substring(1);
+            res += "\n";
+            i++;
+            
+        }
+        return res;
 	}
 }
