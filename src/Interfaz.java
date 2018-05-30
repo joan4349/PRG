@@ -1,14 +1,17 @@
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +46,8 @@ public class Interfaz extends JFrame{
 	protected static Color blueColor = new Color(8,46,147);
 	/**TEXT FIELD**/
 	protected JTextField searcher;
-	protected JLabel trad, tradDesc;
-	protected String traduccion = ">Type some world!";
+	protected JLabel trad, tradDesc, title, information;
+	protected String traduccion = ">Type some word!";
 	/**MENU**/
 	protected JComboBox diccionarios;
 	
@@ -56,7 +59,7 @@ public class Interfaz extends JFrame{
 		setDefaultCloseOperation(Interfaz.EXIT_ON_CLOSE); //esta propiedad se encarga de cerrar la ventana cuando le demos al boton `X`
 		setLayout(null);//declaramos una rejilla que nos permitira dibujar objetos por coordenadas
 		setResizable(false);//prohibimos la redimension de la ventana
-		setBounds(100,100,ancho, alto);
+		setBounds(200,100,ancho, alto);
 		try {
 			icono = ImageIO.read(new File("src/img/alpha.png"));
 			usa = ImageIO.read(new File("src/img/USA.png"));
@@ -109,7 +112,7 @@ public class Interfaz extends JFrame{
 		/**BUTTONS**/
 		protected JButton search, add, delete,voice;
 		/**VOICE**/
-		protected boolean activeVoice = true;
+		protected boolean activeVoice = true, activeInformation = true;
 		
 		public Panel() {
 			setLayout(null);
@@ -193,6 +196,25 @@ public class Interfaz extends JFrame{
 			tradDesc.setFont(new Font("Calibri",Font.BOLD,30));
 			tradDesc.setVisible(true);
 			add(tradDesc);
+			
+			information = new JLabel("Pincha en el titulo para ver todas las palabras del diccionario");
+			information.setBounds(posBuscador+40,180, 1000, 50);
+			information.setForeground(new Color(163,20,190));
+			information.setFont(new Font("Calibri",Font.BOLD,20));
+			information.setVisible(true);
+			add(information);
+			
+			//title
+			title = new JLabel("Traductor  ESPAÑOL - ENGLISH");
+			title.setForeground(blueColor);
+			title.setFont(new Font("Calibri",Font.BOLD,80));
+			title.setBounds(95, 100, 1500, 90);
+			title.addMouseListener(new Raton());
+			title.setVisible(true);
+			add(title);
+
+		
+			
 		}
 		/**SPLIT TRADUCTION
 		 * @param String traduction 
@@ -224,23 +246,27 @@ public class Interfaz extends JFrame{
 			Graphics2D g = (Graphics2D)g2;
 			g.setColor(blueColor);
 			g.setFont(new Font("Calibri",Font.BOLD,80));
-			g.drawString("Traductor  ESPAÑOL - ENGLISH", 95, 100);
 			g.setFont(new Font("SWGothe",Font.ITALIC,30));
 			g.drawString("Grupo", 20, 750);
 			g.drawImage(alpha, 125, 705,50,50,null);
 		}
 		
 		/**MOUSE AND KEYS**/
-		protected class Raton extends KeyAdapter implements ActionListener{
+		protected class Raton extends KeyAdapter implements ActionListener ,MouseListener{
+			
+			private ShowString str;
 			/**MOUSE LISTENERS**/
 			public void actionPerformed(ActionEvent e) {
+				//BUTTONS
 				if(e.getSource().equals(search)) {			
+					
 					System.out.println(dic.search(searcher.getText()));
 					dic.search(searcher.getText());
 					trad.setText(splitTraduction(dic.search(searcher.getText().trim())));
 					tradDesc.setText(splitDescription(dic.search(searcher.getText().trim())));
 					main.repaint();
 			        if(activeVoice) {hablar(dic.search(searcher.getText()));}
+			        
 				}else if(e.getSource().equals(add)) {
 					main.setVisible(false);
 					deletePanel.setVisible(false);
@@ -278,6 +304,66 @@ public class Interfaz extends JFrame{
 					tradDesc.setText(splitDescription(dic.search(searcher.getText().trim())));
 					main.repaint();
 					if(activeVoice) {hablar(dic.search(searcher.getText()));}
+				}
+			}
+			//MOUSE LISTENERS
+			public void mouseClicked(MouseEvent e) {				
+			}
+			public void mousePressed(MouseEvent e) {
+				System.out.println("hooooola");
+				if(activeInformation) {
+					str = new ShowString();
+					str.setVisible(true);
+					activeInformation = false;
+				}else {
+					str.setVisible(false);
+					activeInformation = true;
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("adios");
+				//str.setVisible(false);
+				main.repaint();
+			}
+			public void mouseEntered(MouseEvent e) {
+				information.setVisible(true);
+			}
+			public void mouseExited(MouseEvent e) {
+				information.setVisible(false);
+			}
+			
+			protected class ShowString extends JFrame{
+				public ShowString() {
+					setLayout(null);
+					setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					setResizable(false);
+					setBounds(300,300,1000,500);
+					setTitle("Dictionary.");
+					setIconImage(Interfaz.icono);
+					PanToString p = new PanToString();
+					JScrollPane scrollBar = new JScrollPane(p,
+				            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+					scrollBar.setSize(980,500);
+					add(scrollBar);
+			        setVisible(true);
+				}
+				private class PanToString extends JPanel{
+					public PanToString() {
+						setLayout(null);
+						setBounds(0,0,1000,200);
+						Scrollbar s = new Scrollbar(1);
+						add(s);
+						setBackground(Color.white);
+						JTextArea text= new JTextArea();
+						text.setEditable(false);
+						text.setBounds(0,0,1000,5000);
+						text.setFont(new Font("Consol",Font.ITALIC,20));
+						text.setText(dic.toString());
+						setPreferredSize(new Dimension(1000,5000));
+						text.setVisible(true);
+						add(text);
+					}
 				}
 			}
 		}

@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Diccionario {
-
+	
 	private NodeString first;
 	private int size;
 	
@@ -42,30 +42,28 @@ public class Diccionario {
 	public void insert (String p, String s, String desc) {
 				
 		NodeString aux = first;
-        	NodeString ant = null;
-        	String descrip = "N";
+        NodeString ant = null;
+        String descrip = "N";
         
-        	if(desc.length() == 0) {
-        		descrip = "Without description.";
-        	}else {
-        		descrip = desc;
-        	}
+        if(desc.length() == 0) {
+        	descrip = "Without description.";
+        }else {
+        	descrip = desc;
+        }
         
-		while(aux != null && (aux.word.compareToIgnoreCase(p))<=0){
-		    ant = aux;
-		    aux = aux.next;
-		}
+        while(aux != null && (aux.word.compareToIgnoreCase(p))<=0){
+            ant = aux;
+            aux = aux.next;
+        }
         
-		 if(aux == first){
-            p = p.substring(0,1).toUpperCase() + p.substring(1);
-            s = s.substring(0,1).toUpperCase() + s.substring(1);
-            first = new NodeString(p,s,first);
+        if(aux == first){
+            first = new NodeString(p,s, descrip, first);
             size++;
         }
-        else if(!ant.word.equals(p)){
-                p = p.substring(0,1).toUpperCase() + p.substring(1);
-                s = s.substring(0,1).toUpperCase() + s.substring(1);
-                ant.next = new NodeString(p,s,aux);
+        else{
+            if(ant.word.equals(p)){}
+            else{
+                ant.next = new NodeString(p,s,desc,aux);
                 size++;
             }
         }
@@ -74,7 +72,7 @@ public class Diccionario {
 	 * Quit the word
 	 * **/
 	public void remove(String p) {
-		NodeString aux = first;
+		 NodeString aux = first;
 	    	NodeString ant = null;
 	    	if(size == 0){throw new NoSuchElementException();}
 	    	while(aux != null && !aux.word.equalsIgnoreCase(p)){
@@ -95,16 +93,17 @@ public class Diccionario {
 	 * **/
 	public String search(String p) {
 		NodeString aux = this.first;
-    		while(aux != null && !aux.word.equalsIgnoreCase(p)){
-        		aux = aux.next;
-    		}
-    		String res = "";
+    	while(aux != null && !aux.word.equalsIgnoreCase(p)){
+        	aux = aux.next;
+    	}
+    	String res = "";
     	
-    		if(aux == null){
-        		res = "The word " + p + " doesn`t exist in the dictionary";
-        	}else{
-        	res = "Palabra: " + p + "\t Traducciï¿½n: " + aux.traduction;
-    		}
+    	if(aux == null){
+        	res = "The word " + p + " doesn`t exist int the dictionary";
+        	}
+    	else{
+        	res = "Word: " + p + ". > Traduction: " + aux.traduction + ". > Definition: " + aux.description + ".";
+    	}
     	
     	return res;
 	}
@@ -131,24 +130,28 @@ public class Diccionario {
 	public int size() {
 		return size;
 	}
-
-
-public Diccionario union(Diccionario other) {
+	
+	/**
+	 * @return Dictionary
+	 * @param Dictionary
+	 * sums two dictionaries
+	 * **/
+	public Diccionario union(Diccionario other) {
         Diccionario result = new Diccionario();
         NodeString aux1 = this.first; // nodo a revisar del conjunto this
         NodeString aux2 = other.first; // nodo a revisar de otro
-        NodeString lastResult = null; // Ãºltimo nodo de result, inicialmente null
+        NodeString lastResult = null; // último nodo de result, inicialmente null
         while (aux1 != null && aux2 != null) {
             
             if(aux1.word.equalsIgnoreCase(aux2.word)){
                 if(result.first == null){
                     
-                    result.first = new NodeString(aux1.word, aux1.traduction ,result.first);
+                    result.first = new NodeString(aux1.word, aux1.traduction ,"",result.first);
                     
                     lastResult = result.first;
                 }
                 else{
-                    lastResult.next = new NodeString(aux1.word, aux1.traduction, null);
+                    lastResult.next = new NodeString(aux1.word, aux1.traduction,"", null);
                     lastResult = lastResult.next;
                 }
                 result.size++;
@@ -158,22 +161,22 @@ public Diccionario union(Diccionario other) {
             else{   
                 if(aux1.word.compareTo(aux2.word) < 0) {
                     if(result.first == null){
-                    result.first = new NodeString(aux1.word, aux1.traduction, result.first);
+                    result.first = new NodeString(aux1.word, aux1.traduction,"", result.first);
                     lastResult = result.first;
                     }
                     else{
-                    lastResult.next = new NodeString(aux1.word, aux1.traduction, null);
+                    lastResult.next = new NodeString(aux1.word, aux1.traduction,"", null);
                     lastResult = lastResult.next;
                 }
                 aux1 = aux1.next;
                 }
                 else {
                     if(result.first == null){
-                    result.first = new NodeString(aux2.word, aux2.traduction, result.first);
+                    result.first = new NodeString(aux2.word, aux2.traduction,"", result.first);
                     lastResult = result.first;
                     }
                     else{
-                    lastResult.next = new NodeString(aux2.word, aux2.traduction, null);
+                    lastResult.next = new NodeString(aux2.word, aux2.traduction,"", null);
                     lastResult = lastResult.next;
                 }
                 aux2 = aux2.next;
@@ -184,14 +187,14 @@ public Diccionario union(Diccionario other) {
         
         if(aux1 == null){
             if(result.first == null){
-                result.first = new NodeString(aux2.word, aux2.traduction, result.first);
+                result.first = new NodeString(aux2.word, aux2.traduction, "",result.first);
                 lastResult = result.first;
                 result.size++;
                 aux2 = aux2.next;
             }
             while(aux2!=null){
                 
-                lastResult.next = new NodeString(aux2.word, aux2.traduction,null);
+                lastResult.next = new NodeString(aux2.word, aux2.traduction,"",null);
                 aux2 = aux2.next;
                 lastResult = lastResult.next;
                 result.size++;
@@ -200,13 +203,13 @@ public Diccionario union(Diccionario other) {
         }
         else{
             if(result.first == null){
-                result.first = new NodeString(aux1.word, aux1.traduction,result.first);
+                result.first = new NodeString(aux1.word, aux1.traduction,"",result.first);
                 lastResult = result.first;
                 result.size++;
                 aux1 = aux1.next;
             }
             while(aux1!=null){
-                lastResult.next = new NodeString(aux1.word,aux2.traduction,null);
+                lastResult.next = new NodeString(aux1.word,aux2.traduction,"",null);
                 aux1 = aux1.next;
                 lastResult = lastResult.next;
                 result.size++;
@@ -215,7 +218,6 @@ public Diccionario union(Diccionario other) {
         return result;
                 
     }
-
 
 	
 	/**
@@ -228,10 +230,11 @@ public Diccionario union(Diccionario other) {
 	public String toString(){
     	NodeString aux = first;
         int i = 1;
-        String res= "Palabra--------Traducciï¿½n" + "\n";
+        String res= "Palabra--------Traducción" + "\n";
         while(i <= size){
             res += i + "." + aux.word + "   " + aux.traduction;
             res += "\n";
+            aux = aux.next;
             i++;
             
         }
