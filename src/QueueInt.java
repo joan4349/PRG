@@ -18,7 +18,7 @@ public class QueueInt
 public void add(int x) {
     NodeInt nuevo= new NodeInt(x);
     
-    if (last != null && qfirst.data != x) { last.next= nuevo; }
+    if (last != null) { last.next= nuevo; }
     else { qfirst= nuevo; }
     last= nuevo;
     qsize++;
