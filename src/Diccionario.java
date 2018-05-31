@@ -189,7 +189,7 @@ public class Diccionario {
     	while(aux != null && !aux.word.equalsIgnoreCase(p.trim())){
         	aux = aux.next;
     	}
-    	return aux.word.equalsIgnoreCase(p.trim());
+    	return aux != null;
 		
 		//hecho
 	}
