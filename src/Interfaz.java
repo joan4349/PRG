@@ -41,7 +41,7 @@ public class Interfaz extends JFrame{
 	protected static Diccionario dic;
 	protected static int ancho = 1200, alto = 800, posBuscador = 300, positionYButtons = 600;
 	//FROND END
-	protected static Image icono, usa, es, alpha;
+	protected static Image icono, usa, es, alpha,str;
 	protected static ImageIcon lupa,omg,ON,OFF;
 	protected static Color blueColor = new Color(8,46,147);
 	/**TEXT FIELD**/
@@ -69,6 +69,7 @@ public class Interfaz extends JFrame{
 			lupa = new ImageIcon("src/img/lupa.png");
 			ON = new ImageIcon("src/img/ON.png");
 			OFF= new ImageIcon("src/img/OFF.png");
+			str =  ImageIO.read(new File("src/img/str.png"));
 		} catch (IOException e) {
 			System.err.println("no tienes imagenes");
 		}	
@@ -345,6 +346,7 @@ public class Interfaz extends JFrame{
 				            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 					scrollBar.setSize(980,500);
+					main.repaint();
 					add(scrollBar);
 			        setVisible(true);
 				}
@@ -357,12 +359,18 @@ public class Interfaz extends JFrame{
 						setBackground(Color.white);
 						JTextArea text= new JTextArea();
 						text.setEditable(false);
-						text.setBounds(0,0,1000,5000);
+						text.setBounds(0,0,400,5000);
 						text.setFont(new Font("Consol",Font.ITALIC,20));
 						text.setText(dic.toString());
 						setPreferredSize(new Dimension(1000,5000));
 						text.setVisible(true);
 						add(text);
+					}
+					/**PAINT METHOD**/
+					public void paintComponent(Graphics g2) {
+						super.paintComponent(g2);
+						Graphics2D g = (Graphics2D)g2;
+						g.drawImage(Interfaz.str, 400, 0,600,500,null);
 					}
 				}
 			}

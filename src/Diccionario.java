@@ -34,6 +34,22 @@ public class Diccionario {
 			System.err.println("No existe el archivo");
 		}
 	}
+	/**QUEUE**/
+	public Diccionario(String fil,int a) {
+
+		String word = "", traduction ="", description = "";
+		try {
+			Scanner sc = new Scanner(new File(fil));
+			while(sc.hasNext()) {
+				insert(word, traduction, description);
+				System.out.println(word+ "+"+traduction);
+				
+				//String[] a = description.split("[\\p{Space}\\p{Punct}\\p{Digit}¿¡]+");
+			}
+		}catch(IOException o){
+			System.err.println("No existe el archivo");
+		}
+	}
 	
 	/**
 	 * Insert new word
@@ -46,7 +62,7 @@ public class Diccionario {
         String descrip = "N";
         
         if(desc.length() == 0) {
-        	descrip = "Without description.";
+        	descrip = "Without definition.";
         }else {
         	descrip = desc;
         }
@@ -236,7 +252,6 @@ public class Diccionario {
             res += "\n";
             aux = aux.next;
             i++;
-            
         }
         return res;
 	}
