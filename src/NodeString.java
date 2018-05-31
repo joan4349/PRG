@@ -1,7 +1,7 @@
 
 public class NodeString {
 
-    String word, traduction;//lo declaro public porque pued
+    String word, traduction;
     QueueInt line;
     
     NodeString next;//variable referencia para apuntar objetos de tipo nodeString
